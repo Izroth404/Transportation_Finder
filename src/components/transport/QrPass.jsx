@@ -5,7 +5,17 @@ import { ShieldCheck } from "lucide-react";
  * @param {{ pass: { from_location: string, to_location: string, route_type?: string, employee_name: string, employee_number: string, start_date: string, end_date: string } }} props
  */
 export default function QrPass({ pass }) {
-  const value = encodeURIComponent(`MOVEIN|${pass.employee_number}|${pass.from_location}|${pass.to_location}|${pass.end_date}`);
+  const today = new Date();
+  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  const currentMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  const formatDateForInput = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+  const endDateValue = formatDateForInput(currentMonthEnd);
+  const value = encodeURIComponent(`MOVEIN|${pass.employee_number}|${pass.from_location}|${pass.to_location}|${endDateValue}`);
   // prefer an explicit QR image URL passed on the pass object (e.g. pass.qr_url or pass.qr_image)
   const qrSrc = pass?.qr_url || pass?.qr_image || `https://quickchart.io/qr?text=${value}&size=260&margin=1`;
 

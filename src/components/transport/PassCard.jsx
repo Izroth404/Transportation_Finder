@@ -7,6 +7,13 @@ import QrPass from "./QrPass";
  */
 const prettyDate = (value) => new Date(`${value}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
+const formatDateForInput = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 /**
  * @param {{ pass: { from_location: string, to_location: string, route_type?: string, employee_name: string, employee_number: string, start_date: string, end_date: string } }} props
  */
@@ -14,6 +21,11 @@ export default function PassCard({ pass }) {
   const routeLabel = pass?.route_type === "Return" ? "Both" : "One way";
   const scrollRef = useRef(null);
   const [active, setActive] = useState(0);
+  const today = new Date();
+  const currentMonthStart = formatDateForInput(new Date(today.getFullYear(), today.getMonth(), 1));
+  const currentMonthEnd = formatDateForInput(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+  const startDateValue = currentMonthStart;
+  const endDateValue = currentMonthEnd;
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -107,7 +119,7 @@ export default function PassCard({ pass }) {
                         <CalendarDays className="h-4 w-4" />
                         <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Start date</span>
                       </div>
-                      <p className="text-sm font-semibold text-slate-800">{prettyDate(pass.start_date)}</p>
+                      <p className="text-sm font-semibold text-slate-800">{prettyDate(startDateValue)}</p>
                     </div>
 
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
@@ -115,12 +127,12 @@ export default function PassCard({ pass }) {
                         <CalendarDays className="h-4 w-4" />
                         <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">End date</span>
                       </div>
-                      <p className="text-sm font-semibold text-slate-800">{prettyDate(pass.end_date)}</p>
+                      <p className="text-sm font-semibold text-slate-800">{prettyDate(endDateValue)}</p>
                     </div>
                   </div>
 
                   <div className="mt-3 border-t border-dashed border-slate-200 pt-3 text-center text-sm text-slate-500">
-                    Route: {pass.from_location} to {pass.to_location}
+                    Route: {pass.from_location} to {pass.to_location} And Return <br /> Via-{pass.from_location}
                   </div>
                 </div>
               </article>

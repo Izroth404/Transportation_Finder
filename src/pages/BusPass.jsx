@@ -31,7 +31,7 @@ export default function BusPass() {
 
           <div className="mt-auto pb-2 pt-4">
             <img
-              src="/tata-logo.svg"
+              src={`${import.meta.env.BASE_URL}tata-logo.svg`}
               alt="TATA Consultancy Services"
               className="mx-auto h-20 w-auto object-contain"
             />

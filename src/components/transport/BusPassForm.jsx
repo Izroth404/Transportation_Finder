@@ -3,8 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
-const initial = { employee_name: "", employee_number: "", from_location: "", to_location: "", start_date: "", end_date: "", route_type: "Return" };
-const fields = [["employee_name", "Full name", "text"], ["employee_number", "Employee number", "text"], ["from_location", "From location", "text"], ["to_location", "To location", "text"], ["start_date", "Valid from", "date"], ["end_date", "Valid until", "date"]];
+const initial = { employee_name: "", employee_number: "", from_location: "", to_location: "", route_type: "Return" };
+const fields = [["employee_name", "Full name", "text"], ["employee_number", "Employee number", "text"], ["from_location", "From location", "text"], ["to_location", "To location", "text"]];
 
 export default function BusPassForm() {
   const [form, setForm] = useState(initial);
@@ -13,7 +13,6 @@ export default function BusPassForm() {
   const navigate = useNavigate();
   const submit = async (event) => {
     event.preventDefault();
-    if (form.end_date < form.start_date) return setError("Valid until must be after the start date.");
     setSaving(true);
     const pass = await base44.entities.BusPass.create(form);
     navigate(`/pass/${pass.id}`);
